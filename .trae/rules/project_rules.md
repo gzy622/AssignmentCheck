@@ -1,1 +1,0 @@
-1. 保持项目的HTML代码放置在单个HTML文件 `index.html` 中
