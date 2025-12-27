@@ -1240,7 +1240,7 @@
             
             // 计算姓名列自适应宽度
             const maxNameLength = Math.max(...list.map(s => s.name.length), 2); // 至少2个字符
-            const nameColumnWidth = Math.min(Math.max(maxNameLength * 14 + 16, 50), 180); // 每字符约14px，最小50px，最大180px
+            const nameColumnWidth = Math.min(Math.max(maxNameLength * 18 + 20, 60), 180); // 每字符约18px，最小60px，最大180px
             
             // 构建表头
             let html = `
