@@ -467,6 +467,7 @@
         let isFooterHidden = false;
         let isNameVisible = false;
         let isGradingMode = false; // [新增] 评分模式状态
+        let modalStack = []; // 弹窗状态栈，用于管理返回键
 
         let onInputConfirm = null;
         let onActionConfirm = null;
@@ -648,6 +649,33 @@
                     if (e.target === backdrop) closeModal(modalId);
                 });
             });
+
+            // 安卓返回键支持
+            window.addEventListener('popstate', handleBackButton);
+        }
+
+        // 处理系统返回键
+        function handleBackButton(e) {
+            if (modalStack.length > 0) {
+                const topModal = modalStack[modalStack.length - 1];
+                closeModal(topModal);
+            }
+        }
+
+        // 打开弹窗时压入栈
+        function pushModal(modalId) {
+            if (!modalStack.includes(modalId)) {
+                modalStack.push(modalId);
+                history.pushState({ modalId }, '');
+            }
+        }
+
+        // 关闭弹窗时弹出栈
+        function popModal(modalId) {
+            const index = modalStack.indexOf(modalId);
+            if (index > -1) {
+                modalStack.splice(index, 1);
+            }
         }
 
         // ================= 数据核心 =================
@@ -758,6 +786,7 @@
             modal.classList.add('translate-y-full');
             modal.offsetHeight;
             modal.classList.remove('translate-y-full');
+            pushModal(modalId);
         }
 
         function openDataModal() {
@@ -1808,6 +1837,7 @@
             const modal = document.getElementById('task-modal');
             backdrop.classList.remove('hidden');
             requestAnimationFrame(() => modal.classList.remove('translate-y-full'));
+            pushModal('task-modal');
         }
 
         function openInputModal(title, val, cb) {
@@ -1820,6 +1850,7 @@
             bg.classList.remove('hidden');
             requestAnimationFrame(() => { m.classList.remove('scale-95', 'opacity-0'); m.classList.add('scale-100', 'opacity-100'); });
             setTimeout(() => { input.focus(); input.select(); }, 100);
+            pushModal('input-modal');
         }
 
         function openConfirmModal(title, msg, cb) {
@@ -1830,6 +1861,7 @@
             const m = document.getElementById('confirm-modal');
             bg.classList.remove('hidden');
             requestAnimationFrame(() => { m.classList.remove('scale-95', 'opacity-0'); m.classList.add('scale-100', 'opacity-100'); });
+            pushModal('confirm-modal');
         }
 
         function closeModal(id) {
@@ -1843,6 +1875,7 @@
                 document.getElementById('score-modal').style.marginBottom = '';
                 currentEditingId = null;
             }
+            popModal(id);
             setTimeout(() => bg.classList.add('hidden'), 200);
         }
 
@@ -1984,6 +2017,7 @@
                 input.select();
                 updateScoreModalForKeyboard();
             }, 50);
+            pushModal('score-modal');
         }
 
         // Start
