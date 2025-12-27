@@ -162,6 +162,11 @@
             </div>
         </footer>
 
+        <!-- 版本号显示 -->
+        <div id="version-display" class="absolute bottom-1 right-2 text-[10px] text-gray-300 select-none">
+            v<span id="version-number"></span>
+        </div>
+
         <!-- 全局提示 (fixed 改为 absolute) -->
         <div id="toast"
             class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-black/80 text-white px-4 py-2 rounded-lg text-sm opacity-0 pointer-events-none transition-opacity duration-300 z-toast text-center whitespace-nowrap">
@@ -437,6 +442,13 @@
 
     <script>
         // ================= 配置区域 =================
+        // 版本号规则：主版本.次版本.修订号
+        // - 主版本：重大功能更新或架构变更
+        // - 次版本：新功能或重要改进
+        // - 修订号：bug修复或小改进
+        // 每次代码修改后更新版本号
+        const APP_VERSION = '1.1.0';
+
         const TOTAL_STUDENTS = 49;
         const STORAGE_KEY_V2 = 'homework_data_v2';
         const STORAGE_KEY_V1 = 'homework_data_v1';
@@ -652,6 +664,9 @@
 
             // 安卓返回键支持
             window.addEventListener('popstate', handleBackButton);
+
+            // 初始化版本号显示
+            document.getElementById('version-number').textContent = APP_VERSION;
         }
 
         // 处理系统返回键
