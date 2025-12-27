@@ -5,8 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>作业极速登记</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="css/tailwind.min.css" rel="stylesheet">
+    <link href="css/all.min.css" rel="stylesheet">
     <style>
         /* 基础设置 */
         body {
@@ -92,13 +92,13 @@
 </head>
 <!-- [修改] body 增加桌面端背景色和居中布局 -->
 
-<body class="h-screen w-screen flex items-center justify-center bg-gray-900 overflow-hidden text-gray-800">
+<body class="h-screen w-screen overflow-hidden text-gray-800">
 
     <!-- [新增] 手机模拟容器 -->
     <!-- 移动端：w-full h-full (全屏) -->
     <!-- 桌面端：h-[90vh] aspect-[9/16] (90%屏幕高度，锁定9:16比例) -->
     <div id="app-container"
-        class="relative w-full h-full sm:h-[90vh] sm:aspect-[9/16] sm:max-w-md bg-[#f3f4f6] sm:rounded-[2rem] sm:shadow-2xl overflow-hidden flex flex-col">
+        class="relative w-full h-full flex flex-col">
 
         <!-- 顶部导航 -->
         <header id="app-header"

@@ -15,18 +15,27 @@
 ## 技术栈
 
 - HTML5
-- Tailwind CSS（CDN 引入）
-- Font Awesome 图标库
+- Tailwind CSS（本地化）
+- Font Awesome 图标库（本地化）
 - Vanilla JavaScript
-
-## 使用方式
-
-直接在浏览器中打开 `index.html` 即可使用，无需服务器部署。
 
 ## 文件结构
 
 ```
 AssignmentCheck/
-├── index.html    # 主应用文件
-└── README.md     # 说明文档
+├── index.html           # 主应用文件
+├── README.md            # 说明文档
+├── css/
+│   ├── fontawesome.min.css   # Font Awesome 样式
+│   └── tailwind.min.css      # Tailwind CSS
+└── webfonts/            # Font Awesome 字体文件
+    ├── fa-solid-900.woff2
+    ├── fa-regular-400.woff2
+    └── fa-brands-400.woff2
 ```
+
+## 本地化资源
+
+所有外部资源已本地化：
+- Font Awesome 图标库至 `css/` 和 `webfonts/` 目录
+- Tailwind CSS 至 `css/tailwind.min.css`
