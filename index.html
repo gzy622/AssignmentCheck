@@ -162,11 +162,6 @@
             </div>
         </footer>
 
-        <!-- 版本号显示 -->
-        <div id="version-display" class="absolute bottom-1 right-2 text-[10px] text-gray-300 select-none">
-            v<span id="version-number"></span>
-        </div>
-
         <!-- 全局提示 (fixed 改为 absolute) -->
         <div id="toast"
             class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-black/80 text-white px-4 py-2 rounded-lg text-sm opacity-0 pointer-events-none transition-opacity duration-300 z-toast text-center whitespace-nowrap">
@@ -274,6 +269,11 @@
                             <span><i class="fa-solid fa-trash-can mr-2"></i> 重置所有数据</span>
                             <i class="fa-solid fa-chevron-right text-xs text-red-200"></i>
                         </button>
+                    </div>
+
+                    <!-- 版本号显示 -->
+                    <div class="pt-3 mt-2 border-t border-gray-100 text-center">
+                        <span class="text-[10px] text-gray-400">版本 v<span id="data-modal-version">1.1.0</span></span>
                     </div>
                 </div>
             </div>
