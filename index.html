@@ -666,7 +666,50 @@
             window.addEventListener('popstate', handleBackButton);
 
             // 初始化版本号显示
-            document.getElementById('version-number').textContent = APP_VERSION;
+            document.getElementById('data-modal-version').textContent = APP_VERSION;
+
+            // 显示版本号 Toast
+            showVersionToast();
+            setupVersionToastDismiss();
+        }
+
+        // 版本号 Toast 控制
+        let versionToastTimer = null;
+        let versionToastShown = false;
+
+        function showVersionToast() {
+            if (versionToastShown) return;
+            versionToastShown = true;
+
+            const toast = document.getElementById('toast');
+            toast.textContent = '版本 v' + APP_VERSION;
+            toast.classList.remove('opacity-0');
+
+            // 3秒后自动消失
+            versionToastTimer = setTimeout(() => {
+                hideVersionToast();
+            }, 3000);
+        }
+
+        function hideVersionToast() {
+            const toast = document.getElementById('toast');
+            toast.classList.add('opacity-0');
+            if (versionToastTimer) {
+                clearTimeout(versionToastTimer);
+                versionToastTimer = null;
+            }
+        }
+
+        // 用户操作时立即隐藏版本号 Toast
+        function setupVersionToastDismiss() {
+            const dismissEvents = ['click', 'touchstart', 'keydown', 'scroll', 'input'];
+
+            dismissEvents.forEach(event => {
+                document.addEventListener(event, function hideOnAction() {
+                    hideVersionToast();
+                    document.removeEventListener(event, hideOnAction);
+                }, { once: true, passive: true });
+            });
         }
 
         // 处理系统返回键
