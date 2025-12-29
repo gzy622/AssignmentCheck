@@ -144,10 +144,10 @@
                     <i class="fa-solid fa-user-tag text-sm mb-0.5"></i> 姓名
                 </button>
 
-                <button onclick="copyMissingReport()"
+                <button onclick="exportData()"
                     class="flex-1 bg-gray-800 text-white font-medium rounded-xl active:bg-gray-900 shadow transition flex items-center justify-center text-sm"
-                    title="复制未交名单">
-                    <i class="fa-regular fa-copy text-lg"></i>
+                    title="导出数据">
+                    <i class="fa-solid fa-file-export text-lg"></i>
                 </button>
 
                 <button onclick="openStatsModal()"
@@ -253,6 +253,11 @@
 
                     <div class="pt-2 border-t border-gray-100">
                         <h4 class="text-xs font-bold text-gray-400 uppercase mb-2 ml-1">操作</h4>
+                        <button onclick="copyMissingReport(); closeModal('data-modal')"
+                            class="w-full p-3 rounded-xl bg-gray-50 text-gray-700 font-medium active:bg-gray-100 flex items-center justify-between mb-2 menu-item">
+                            <span><i class="fa-regular fa-copy text-gray-500 mr-2"></i> 复制未交名单</span>
+                            <i class="fa-solid fa-chevron-right text-xs text-gray-300"></i>
+                        </button>
                         <button onclick="invertSelection(); closeModal('data-modal')"
                             class="w-full p-3 rounded-xl bg-gray-50 text-gray-700 font-medium active:bg-gray-100 flex items-center justify-between mb-2 menu-item">
                             <span><i class="fa-solid fa-right-left text-gray-500 mr-2"></i> 一键反选状态</span>
@@ -273,7 +278,7 @@
 
                     <!-- 版本号显示 -->
                     <div class="pt-3 mt-2 border-t border-gray-100 text-center">
-                        <span class="text-[10px] text-gray-400">版本 v<span id="data-modal-version">1.1.0</span></span>
+                        <span class="text-[10px] text-gray-400">版本 v<span id="data-modal-version">1.1.1</span></span>
                     </div>
                 </div>
             </div>
@@ -447,7 +452,7 @@
         // - 次版本：新功能或重要改进
         // - 修订号：bug修复或小改进
         // 每次代码修改后更新版本号
-        const APP_VERSION = '1.1.0';
+        const APP_VERSION = '1.1.1';
 
         const TOTAL_STUDENTS = 49;
         const STORAGE_KEY_V2 = 'homework_data_v2';
