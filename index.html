@@ -114,7 +114,7 @@
 <body class="w-screen overflow-hidden text-gray-800">
 
     <!-- [新增] 手机模拟容器 -->
-    <div id="app-container" class="absolute inset-0 flex flex-col">
+    <div id="app-container" class="absolute inset-0">
         <!-- 顶部导航 -->
         <header id="app-header"
             class="bg-white shadow-sm z-10 px-4 py-2 flex justify-between items-center shrink-0 transition-all duration-300 h-12 absolute top-0 left-0 right-0">
@@ -135,20 +135,20 @@
         </div>
 
         <!-- 主体网格 -->
-        <main id="main-container" class="absolute top-13 left-0 right-0 bottom-[88px] overflow-y-auto hide-scrollbar p-3 transition-all duration-300">
+        <main id="main-container" class="absolute top-[52px] left-0 right-0 bottom-[84px] overflow-y-auto hide-scrollbar p-3 transition-all duration-300">
             <div id="student-grid" class="grid grid-cols-5 gap-3 pb-24 transition-opacity duration-200 opacity-0"></div>
         </main>
 
         <!-- 悬浮按钮 -->
         <button onclick="toggleFooterOnly()" id="immersive-btn"
             class="absolute right-4 z-30 w-10 h-10 bg-white/90 backdrop-blur text-gray-500 rounded-full shadow-lg border border-gray-200 flex items-center justify-center active:scale-90 hover:text-blue-600 transition-all duration-300"
-            style="bottom: 100px;">
+            style="bottom: 96px;">
             <i class="fa-solid fa-expand text-base"></i>
         </button>
 
         <!-- 底部操作栏 -->
         <footer id="app-footer"
-            class="bg-white border-t border-gray-200 p-3 pb-6 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] z-20 transition-all duration-300 absolute bottom-0 left-0 right-0 h-[88px]">
+            class="bg-white border-t border-gray-200 p-3 pb-6 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] z-20 transition-all duration-300 absolute bottom-0 left-0 right-0 h-[84px]">
             <div class="flex gap-2 h-12">
                 <button onclick="toggleClickMode()" id="btn-mode-toggle"
                     class="w-14 bg-white text-gray-600 border border-gray-300 rounded-xl font-medium active:bg-gray-50 flex flex-col items-center justify-center text-[10px] shadow-sm transition-colors duration-200">
@@ -294,7 +294,7 @@
 
                     <!-- 版本号显示 -->
                     <div class="pt-3 mt-2 border-t border-gray-100 text-center">
-                        <span class="text-[10px] text-gray-400">版本 v<span id="data-modal-version">1.1.4</span></span>
+                        <span class="text-[10px] text-gray-400">版本 v<span id="data-modal-version">1.1.5</span></span>
                     </div>
                 </div>
             </div>
@@ -468,7 +468,7 @@
         // - 次版本：新功能或重要改进
         // - 修订号：bug修复或小改进
         // 每次代码修改后更新版本号
-        const APP_VERSION = '1.1.4';
+        const APP_VERSION = '1.1.5';
 
         const TOTAL_STUDENTS = 49;
         const STORAGE_KEY_V2 = 'homework_data_v2';
