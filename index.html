@@ -4,17 +4,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
     <title>作业极速登记</title>
     <link href="css/tailwind.min.css" rel="stylesheet">
     <link href="css/all.min.css" rel="stylesheet">
     <style>
         /* 基础设置 */
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
         body {
             -webkit-user-select: none;
             user-select: none;
             -webkit-tap-highlight-color: transparent;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             touch-action: pan-y;
+            overflow: hidden;
+        }
+
+        @supports (-webkit-touch-callout: none) {
+            body {
+                height: -webkit-fill-available;
+            }
         }
 
         /* 交互反馈 */
@@ -278,7 +293,7 @@
 
                     <!-- 版本号显示 -->
                     <div class="pt-3 mt-2 border-t border-gray-100 text-center">
-                        <span class="text-[10px] text-gray-400">版本 v<span id="data-modal-version">1.1.1</span></span>
+                        <span class="text-[10px] text-gray-400">版本 v<span id="data-modal-version">1.1.2</span></span>
                     </div>
                 </div>
             </div>
@@ -452,7 +467,7 @@
         // - 次版本：新功能或重要改进
         // - 修订号：bug修复或小改进
         // 每次代码修改后更新版本号
-        const APP_VERSION = '1.1.1';
+        const APP_VERSION = '1.1.2';
 
         const TOTAL_STUDENTS = 49;
         const STORAGE_KEY_V2 = 'homework_data_v2';
