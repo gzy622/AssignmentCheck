@@ -103,6 +103,208 @@
         .z-input-modal {
             z-index: 60;
         }
+
+        /* ================= 横屏模式适配 ================= */
+        @media (orientation: landscape) {
+            /* 1. 布局重构 - 悬浮顶栏 */
+            
+            /* 隐藏底部导航栏 */
+            #app-footer {
+                display: none !important;
+            }
+            
+            /* 调整主体容器，移除底部 padding */
+            #main-container {
+                padding-bottom: 0.5rem !important;
+                padding-top: 0.5rem !important;
+            }
+            
+            /* 隐藏悬浮按钮 */
+            #immersive-btn {
+                display: none !important;
+            }
+            
+            /* 进度条在横屏时隐藏 */
+            #app-progress {
+                display: none !important;
+            }
+            
+            /* 顶栏改为悬浮窗样式 */
+            #app-header {
+                position: absolute !important;
+                top: 8px !important;
+                left: 8px !important;
+                right: auto !important;
+                width: 220px !important;
+                height: 32px !important;
+                padding: 0 0.5rem !important;
+                background: rgba(255, 255, 255, 0.95) !important;
+                backdrop-filter: blur(8px) !important;
+                border-radius: 8px !important;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15) !important;
+                flex-direction: row !important;
+                align-items: center !important;
+                justify-content: space-between !important;
+                transition: all 0.3s ease !important;
+                z-index: 100 !important;
+                opacity: 0.6 !important;
+                transform: translateY(0) !important;
+            }
+            
+            /* 顶栏悬停或获得焦点时完全显示 */
+            #app-header:hover,
+            #app-header:focus-within,
+            #app-header.expanded {
+                opacity: 1 !important;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2) !important;
+            }
+            
+            /* 顶栏内容容器 */
+            #app-header > div:first-child {
+                display: flex !important;
+                flex-direction: row !important;
+                align-items: center !important;
+                gap: 0.25rem !important;
+                cursor: pointer !important;
+            }
+            
+            /* 统计信息容器 */
+            #app-header .flex.items-baseline {
+                display: flex !important;
+                flex-direction: row !important;
+                align-items: baseline !important;
+                gap: 0.125rem !important;
+            }
+            
+            /* 标题字体压缩 */
+            #current-task-title {
+                font-size: 0.75rem !important;
+                max-width: 80px !important;
+            }
+            
+            /* 下拉箭头 */
+            #app-header .fa-caret-down {
+                font-size: 0.625rem !important;
+                margin-bottom: 0 !important;
+            }
+            
+            /* 统计文字 */
+            #app-header .text-xs {
+                font-size: 0.625rem !important;
+            }
+            
+            /* 统计数字 */
+            #count-display {
+                font-size: 0.875rem !important;
+            }
+            
+            /* 进度条在横屏时隐藏 */
+            #app-progress {
+                display: none !important;
+            }
+            
+            /* 横屏菜单容器 - 仅在横屏显示 */
+            #landscape-menu {
+                display: flex !important;
+                position: fixed !important;
+                right: 8px !important;
+                bottom: 8px !important;
+                top: auto !important;
+                transform: none !important;
+                background: rgba(255, 255, 255, 0.95) !important;
+                backdrop-filter: blur(8px) !important;
+                border: 1px solid #e5e7eb !important;
+                border-radius: 8px !important;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15) !important;
+                padding: 0.25rem !important;
+                gap: 0.25rem !important;
+                z-index: 100 !important;
+                opacity: 0.6 !important;
+                transition: all 0.3s ease !important;
+            }
+            
+            /* 横屏菜单悬停时完全显示 */
+            #landscape-menu:hover,
+            #landscape-menu.expanded {
+                opacity: 1 !important;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2) !important;
+            }
+            
+            /* 横屏菜单按钮样式 */
+            .landscape-menu-btn {
+                width: 28px !important;
+                height: 28px !important;
+                border: 1px solid #e5e7eb !important;
+                border-radius: 6px !important;
+                background: white !important;
+                color: #6b7280 !important;
+                display: flex !important;
+                align-items: center !important;
+                justify-content: center !important;
+                cursor: pointer !important;
+                transition: all 0.2s !important;
+                font-size: 0.625rem !important;
+            }
+            
+            .landscape-menu-btn:active {
+                background: #f3f4f6 !important;
+                transform: scale(0.9) !important;
+            }
+            
+            .landscape-menu-btn:hover {
+                color: #2563eb !important;
+                border-color: #2563eb !important;
+                background: #eff6ff !important;
+            }
+            
+            /* 2. 网格自适应 */
+            #student-grid {
+                grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)) !important;
+                gap: 0.5rem !important;
+                padding: 0.5rem !important;
+            }
+            
+            /* 3. 卡片微调 */
+            .student-btn {
+                height: 45px !important;
+                aspect-ratio: unset !important;
+                border-radius: 0.375rem !important;
+                flex-direction: row !important;
+                padding: 0 0.5rem !important;
+                border: 1px solid #e5e7eb !important;
+                box-shadow: none !important;
+            }
+            
+            /* 卡片内部学号位置调整 */
+            .student-btn .absolute.top-1.left-1 {
+                position: static !important;
+                font-size: 0.625rem !important;
+                margin-right: 0.25rem;
+                order: 1;
+            }
+            
+            /* 卡片内部姓名/学号调整 */
+            .student-btn span:not(.absolute) {
+                font-size: 0.75rem !important;
+                order: 2;
+                text-align: left;
+                flex: 1;
+            }
+            
+            /* 分数标签位置调整 */
+            .student-btn .absolute.top-1.right-1 {
+                position: static !important;
+                font-size: 0.625rem !important;
+                padding: 0.125rem 0.25rem !important;
+                margin-left: 0.25rem;
+                order: 3;
+            }
+        }
+        
+        /* 横屏菜单容器默认隐藏 */
+        #landscape-menu {
+            display: none;
+        }
     </style>
 </head>
 <!-- [修改] body 增加桌面端背景色和居中布局 -->
@@ -126,6 +328,25 @@
             <div class="flex items-baseline gap-1">
                 <span class="text-xs text-gray-500">已交</span>
                 <span class="text-xl font-bold text-blue-600 font-mono" id="count-display">0/49</span>
+            </div>
+            
+            <!-- 横屏模式菜单容器 -->
+            <div id="landscape-menu" class="landscape-menu-container">
+                <button onclick="toggleClickMode()" class="landscape-menu-btn" title="切换模式">
+                    <i class="fa-solid fa-list-check"></i>
+                </button>
+                <button onclick="toggleNameDisplay()" class="landscape-menu-btn" title="显示姓名">
+                    <i class="fa-solid fa-user-tag"></i>
+                </button>
+                <button onclick="exportData()" class="landscape-menu-btn" title="导出数据">
+                    <i class="fa-solid fa-file-export"></i>
+                </button>
+                <button onclick="openStatsModal()" class="landscape-menu-btn" title="统计">
+                    <i class="fa-solid fa-chart-bar"></i>
+                </button>
+                <button onclick="openDataModal()" class="landscape-menu-btn" title="数据">
+                    <i class="fa-solid fa-database"></i>
+                </button>
             </div>
         </header>
 
@@ -293,7 +514,7 @@
 
                     <!-- 版本号显示 -->
                     <div class="pt-3 mt-2 border-t border-gray-100 text-center">
-                        <span class="text-[10px] text-gray-400">版本 v<span id="data-modal-version">1.1.3</span></span>
+                        <span class="text-[10px] text-gray-400">版本 v<span id="data-modal-version">1.1.5</span></span>
                     </div>
                 </div>
             </div>
@@ -467,7 +688,7 @@
         // - 次版本：新功能或重要改进
         // - 修订号：bug修复或小改进
         // 每次代码修改后更新版本号
-        const APP_VERSION = '1.1.3';
+        const APP_VERSION = '1.1.5';
 
         const TOTAL_STUDENTS = 49;
         const STORAGE_KEY_V2 = 'homework_data_v2';
@@ -691,6 +912,9 @@
             // 显示版本号 Toast
             showVersionToast();
             setupVersionToastDismiss();
+
+            // 横屏模式悬浮窗自动隐藏逻辑
+            setupLandscapeAutoHide();
         }
 
         // 版本号 Toast 控制
@@ -729,6 +953,33 @@
                     hideVersionToast();
                     document.removeEventListener(event, hideOnAction);
                 }, { once: true, passive: true });
+            });
+        }
+
+        // 横屏模式悬浮窗自动隐藏
+        let landscapeHideTimer = null;
+        const LANDSCAPE_HIDE_DELAY = 2000;
+
+        function setupLandscapeAutoHide() {
+            const showFloatingUI = () => {
+                if (window.innerWidth > window.innerHeight) {
+                    const header = document.getElementById('app-header');
+                    const menu = document.getElementById('landscape-menu');
+                    if (header) header.classList.add('expanded');
+                    if (menu) menu.classList.add('expanded');
+                    
+                    clearTimeout(landscapeHideTimer);
+                    landscapeHideTimer = setTimeout(() => {
+                        const h = document.getElementById('app-header');
+                        const m = document.getElementById('landscape-menu');
+                        if (h) h.classList.remove('expanded');
+                        if (m) m.classList.remove('expanded');
+                    }, LANDSCAPE_HIDE_DELAY);
+                }
+            };
+
+            ['mousemove', 'touchmove', 'click', 'scroll', 'keydown'].forEach(event => {
+                document.addEventListener(event, showFloatingUI, { passive: true });
             });
         }
 
