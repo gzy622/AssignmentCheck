@@ -263,19 +263,19 @@
             /* 5. 网格布局优化 - 允许滚动 */
             #student-grid {
                 display: grid !important;
-                grid-template-columns: repeat(7, 1fr) !important;
-                gap: 0.25rem !important;
-                padding: 0.25rem !important;
+                grid-template-columns: repeat(8, 1fr) !important;
+                gap: 0.125rem !important;
+                padding: 0.125rem !important;
                 width: 100% !important;
             }
 
-            /* 6. 卡片极简尺寸 - 较小尺寸 */
+            /* 6. 卡片极简尺寸 - 更小尺寸 */
             .student-btn {
                 aspect-ratio: 1 !important;
                 width: 100% !important;
                 height: auto !important;
-                padding: 0.25rem !important;
-                border-radius: 0.25rem !important;
+                padding: 0.125rem !important;
+                border-radius: 0.125rem !important;
                 flex-direction: column !important;
                 border: 1px solid #e5e7eb !important;
                 box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05) !important;
@@ -285,14 +285,14 @@
             /* 卡片内部布局 */
             .student-btn .absolute.top-1.left-1 {
                 position: absolute !important;
-                top: 0.125rem !important;
-                left: 0.125rem !important;
-                font-size: 0.5rem !important;
+                top: 0.0625rem !important;
+                left: 0.0625rem !important;
+                font-size: 0.375rem !important;
                 margin: 0 !important;
             }
 
             .student-btn span:not(.absolute) {
-                font-size: 0.75rem !important;
+                font-size: 0.625rem !important;
                 order: unset !important;
                 text-align: center !important;
                 flex: unset !important;
@@ -301,10 +301,10 @@
 
             .student-btn .absolute.top-1.right-1 {
                 position: absolute !important;
-                top: 0.125rem !important;
-                right: 0.125rem !important;
-                font-size: 0.5rem !important;
-                padding: 0.0625rem 0.125rem !important;
+                top: 0.0625rem !important;
+                right: 0.0625rem !important;
+                font-size: 0.375rem !important;
+                padding: 0.03125rem 0.0625rem !important;
                 margin: 0 !important;
             }
 
@@ -778,7 +778,7 @@
         // - 次版本：新功能或重要改进
         // - 修订号：bug修复或小改进
         // 每次代码修改后更新版本号
-        const APP_VERSION = '1.1.9';
+        const APP_VERSION = '1.2.0';
 
         const TOTAL_STUDENTS = 49;
         const STORAGE_KEY_V2 = 'homework_data_v2';
