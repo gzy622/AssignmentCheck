@@ -106,9 +106,9 @@
 
         /* ================= 横屏模式适配 - 侧边栏布局 ================= */
         @media (orientation: landscape) {
-            /* 1. 主容器重构 */
+            /* 1. 主容器重构 - 侧边栏在右侧 */
             #app-container {
-                flex-direction: row !important;
+                flex-direction: row-reverse !important;
                 height: 100vh !important;
                 overflow: hidden;
             }
