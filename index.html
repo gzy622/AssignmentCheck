@@ -588,6 +588,23 @@
                     </div>
 
                     <div class="pt-2 border-t border-gray-100">
+                        <h4 class="text-xs font-bold text-gray-400 uppercase mb-2 ml-1">学生列表</h4>
+                        <button onclick="openStudentManagerModal()"
+                            class="w-full p-3 rounded-xl bg-indigo-50 text-indigo-700 font-medium active:bg-indigo-100 flex items-center justify-between mb-2 menu-item">
+                            <span><i class="fa-solid fa-users text-indigo-500 mr-2"></i> 管理学生名单</span>
+                            <i class="fa-solid fa-chevron-right text-xs text-indigo-300"></i>
+                        </button>
+                        <button onclick="exportStudentList()"
+                            class="w-full p-3 rounded-xl bg-gray-50 text-gray-700 font-medium active:bg-gray-100 flex items-center justify-between mb-2 menu-item">
+                            <span><i class="fa-solid fa-download text-gray-500 mr-2"></i> 导出学生名单</span>
+                        </button>
+                        <button onclick="triggerImportStudents()"
+                            class="w-full p-3 rounded-xl bg-gray-50 text-gray-700 font-medium active:bg-gray-100 flex items-center justify-between mb-2 menu-item">
+                            <span><i class="fa-solid fa-upload text-gray-500 mr-2"></i> 导入学生名单</span>
+                        </button>
+                    </div>
+
+                    <div class="pt-2 border-t border-gray-100">
                         <h4 class="text-xs font-bold text-gray-400 uppercase mb-2 ml-1">操作</h4>
                         <button onclick="copyMissingReport(); closeModal('data-modal')"
                             class="w-full p-3 rounded-xl bg-gray-50 text-gray-700 font-medium active:bg-gray-100 flex items-center justify-between mb-2 menu-item">
@@ -614,7 +631,7 @@
 
                     <!-- 版本号显示 -->
                     <div class="pt-3 mt-2 border-t border-gray-100 text-center">
-                        <span class="text-[10px] text-gray-400">版本 v<span id="data-modal-version">1.1.5</span></span>
+                        <span class="text-[10px] text-gray-400">版本 v<span id="data-modal-version">1.3.3</span></span>
                     </div>
                 </div>
             </div>
@@ -654,7 +671,65 @@
             </div>
         </div>
 
-        <!-- 6. 统计汇总全屏页面 -->
+        <!-- 6. 学生名单管理弹窗 -->
+        <div id="student-modal-backdrop"
+            class="absolute inset-0 bg-black/40 backdrop-blur-sm hidden z-modal-backdrop flex items-end sm:items-center justify-center sm:p-4 overflow-hidden">
+            <div id="student-modal"
+                class="bg-white w-full sm:max-w-lg sm:rounded-2xl rounded-t-2xl p-0 shadow-2xl transform transition-transform duration-300 translate-y-full flex flex-col max-h-[85vh] sm:max-h-[70vh]">
+                <div class="p-4 border-b border-gray-100 flex justify-between items-center shrink-0">
+                    <div class="flex items-center gap-2">
+                        <h3 class="text-lg font-bold text-gray-800">学生名单管理</h3>
+                        <span class="bg-indigo-100 text-indigo-600 text-xs px-2 py-0.5 rounded-full" id="student-count-badge">0</span>
+                    </div>
+                    <button onclick="closeModal('student-modal')" class="text-gray-400 hover:text-gray-600 p-2"><i
+                            class="fa-solid fa-times"></i></button>
+                </div>
+                <div class="p-3 border-b border-gray-100 bg-gray-50 space-y-2 shrink-0">
+                    <div class="flex gap-2">
+                        <div class="relative flex-1">
+                            <i class="fa-solid fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
+                            <input type="text" id="student-search-input"
+                                class="w-full bg-white border border-gray-200 rounded-xl pl-9 pr-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                                placeholder="搜索学生姓名" oninput="searchStudents(this.value)">
+                        </div>
+                        <button onclick="openAddStudentModal()"
+                            class="px-4 py-2 bg-indigo-600 text-white rounded-xl font-medium active:bg-indigo-700 text-sm whitespace-nowrap flex items-center gap-1">
+                            <i class="fa-solid fa-plus text-xs"></i> 添加
+                        </button>
+                    </div>
+                    <div class="flex items-center justify-between text-xs">
+                        <div class="flex items-center gap-3">
+                            <label class="flex items-center gap-1 cursor-pointer text-gray-500">
+                                <input type="checkbox" id="select-all-students" onchange="toggleSelectAllStudents(this.checked)" class="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
+                                <span>全选</span>
+                            </label>
+                            <span class="text-gray-400" id="selected-count">已选 0 人</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <button onclick="batchDeleteStudents()" class="text-red-500 hover:text-red-600 font-medium disabled:opacity-50" disabled id="batch-delete-btn">
+                                <i class="fa-solid fa-trash-can mr-1"></i> 批量删除
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex-1 overflow-y-auto p-2 space-y-1 min-h-0" id="student-list-container">
+                </div>
+                <div class="p-3 border-t border-gray-100 bg-gray-50 space-y-2 shrink-0">
+                    <div class="grid grid-cols-2 gap-2">
+                        <button onclick="resetToDefaultStudents()"
+                            class="p-2.5 rounded-xl bg-orange-50 text-orange-600 font-medium active:bg-orange-100 flex items-center justify-center gap-1.5 text-sm">
+                            <i class="fa-solid fa-rotate-left text-sm"></i> 恢复默认
+                        </button>
+                        <button onclick="exportStudentList()"
+                            class="p-2.5 rounded-xl bg-green-50 text-green-600 font-medium active:bg-green-100 flex items-center justify-center gap-1.5 text-sm">
+                            <i class="fa-solid fa-download text-sm"></i> 导出名单
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 7. 统计汇总全屏页面 -->
         <div id="stats-modal-backdrop"
             class="fixed inset-0 bg-white z-modal-backdrop hidden flex flex-col">
             <div id="stats-modal" class="flex flex-col h-full">
@@ -780,6 +855,7 @@
     </div> <!-- End app-container -->
 
     <input type="file" id="import-file-input" accept=".json" class="hidden" onchange="handleFileImport(event)">
+    <input type="file" id="import-student-input" accept=".json" class="hidden" onchange="importStudents(this.files[0])">
 
     <script>
         // ================= 配置区域 =================
@@ -788,22 +864,14 @@
         // - 次版本：新功能或重要改进
         // - 修订号：bug修复或小改进
         // 每次代码修改后更新版本号
-        const APP_VERSION = '1.2.2';
+        const APP_VERSION = '1.3.2';
 
-        const TOTAL_STUDENTS = 49;
         const STORAGE_KEY_V2 = 'homework_data_v2';
         const STORAGE_KEY_V1 = 'homework_data_v1';
         const NAME_VISIBILITY_KEY = 'homework_name_visible';
-        
-        const UI_CONSTANTS = {
-            TOAST_DURATION: 2000,
-            LONG_PRESS_DURATION: 500,
-            SAVE_THROTTLE_DELAY: 500,
-            MODAL_TRANSITION_DELAY: 200,
-            KEYBOARD_MAX_SHIFT_RATIO: 0.4
-        };
+        const STUDENTS_KEY = 'homework_students';
 
-        const PLACEHOLDER_NAMES = [
+        const DEFAULT_STUDENTS = [
             "陈嘉乐", "廖婷", "徐伟浩", "刘嘉宝", "谢瑞宏", "练嘉铖", "崔鑫琪",
             "李梓龙", "古宏民", "刘秋娴", "刘银欣", "李嘉君", "周嘉琪", "曾婧玮",
             "丘欣芷", "吴玟怡", "杨欢", "吴学文", "罗雅茹", "凌浩天", "李佳",
@@ -812,6 +880,110 @@
             "吴嘉钰", "刘依婷", "吴苑婷", "曾誉宸", "刁瑜", "郭静", "刘诗琪",
             "黎伟平", "李敏锐", "杨鸿为", "熊晓逸", "梁黛秦", "谢蕊怡", "王杭州"
         ];
+
+        const StudentManager = {
+            _students: null,
+
+            init() {
+                try {
+                    const stored = localStorage.getItem(STUDENTS_KEY);
+                    if (stored) {
+                        const parsed = JSON.parse(stored);
+                        if (Array.isArray(parsed) && parsed.length > 0) {
+                            this._students = parsed;
+                            return true;
+                        }
+                    }
+                } catch (e) {
+                    console.error('加载学生列表失败:', e);
+                }
+                this._students = [...DEFAULT_STUDENTS];
+                this.save();
+                return true;
+            },
+
+            save() {
+                try {
+                    localStorage.setItem(STUDENTS_KEY, JSON.stringify(this._students));
+                    return true;
+                } catch (e) {
+                    console.error('保存学生列表失败:', e);
+                    return false;
+                }
+            },
+
+            getAll() {
+                if (!this._students) this.init();
+                return this._students;
+            },
+
+            getCount() {
+                return this.getAll().length;
+            },
+
+            getName(id) {
+                const students = this.getAll();
+                const idx = id - 1;
+                return (idx >= 0 && idx < students.length) ? students[idx] : `同学${id}`;
+            },
+
+            add(name) {
+                if (!name || typeof name !== 'string' || name.trim() === '') return false;
+                this._students.push(name.trim());
+                return this.save();
+            },
+
+            edit(id, newName) {
+                if (!newName || typeof newName !== 'string' || newName.trim() === '') return false;
+                const idx = id - 1;
+                if (idx >= 0 && idx < this._students.length) {
+                    this._students[idx] = newName.trim();
+                    return this.save();
+                }
+                return false;
+            },
+
+            delete(id) {
+                const idx = id - 1;
+                if (idx >= 0 && idx < this._students.length) {
+                    this._students.splice(idx, 1);
+                    return this.save();
+                }
+                return false;
+            },
+
+            insert(id, name) {
+                if (!name || typeof name !== 'string' || name.trim() === '') return false;
+                const idx = id - 1;
+                if (idx >= 0 && idx <= this._students.length) {
+                    this._students.splice(idx, 0, name.trim());
+                    return this.save();
+                }
+                return false;
+            },
+
+            resetToDefault() {
+                this._students = [...DEFAULT_STUDENTS];
+                return this.save();
+            },
+
+            export() {
+                return JSON.stringify(this._students, null, 2);
+            },
+
+            import(jsonStr) {
+                try {
+                    const parsed = JSON.parse(jsonStr);
+                    if (Array.isArray(parsed) && parsed.length > 0 && parsed.every(s => typeof s === 'string')) {
+                        this._students = parsed;
+                        return this.save();
+                    }
+                } catch (e) {
+                    console.error('导入学生列表失败:', e);
+                }
+                return false;
+            }
+        };
 
         // ================= 状态管理 =================
         let appState = { currentTaskId: null, tasks: [] };
@@ -866,7 +1038,7 @@
             isBoolean: (val) => typeof val === 'boolean',
             isArray: (val) => Array.isArray(val),
             isObject: (val) => val !== null && typeof val === 'object' && !Array.isArray(val),
-            isValidId: (val) => TypeValidator.isNumber(val) && val > 0 && val <= TOTAL_STUDENTS,
+            isValidId: (val) => TypeValidator.isNumber(val) && val > 0 && val <= StudentManager.getCount(),
             validateAppState: (state) => {
                 if (!state || typeof state !== 'object') return false;
                 if (!TypeValidator.isArray(state.tasks)) return false;
@@ -955,6 +1127,8 @@
 
         // ================= 初始化 =================
         function init() {
+            StudentManager.init();
+
             const savedVisibility = localStorage.getItem(NAME_VISIBILITY_KEY);
             if (savedVisibility !== null) isNameVisible = JSON.parse(savedVisibility);
             updateNameButtonState();
@@ -1140,11 +1314,12 @@
             }
             const records = currentTask.records;
             currentStudents = [];
-            for (let i = 1; i <= TOTAL_STUDENTS; i++) {
+            const allStudents = StudentManager.getAll();
+            for (let i = 1; i <= StudentManager.getCount(); i++) {
                 const r = records[i] || { submitted: false, score: null };
                 currentStudents.push({
                     id: i,
-                    name: PLACEHOLDER_NAMES[i - 1] || `同学${i}`,
+                    name: StudentManager.getName(i),
                     submitted: TypeValidator.isBoolean(r.submitted) ? r.submitted : false,
                     score: r.score !== undefined ? r.score : null
                 });
@@ -1483,13 +1658,12 @@
             const studentStats = {};
             let totalSubmissions = 0;
             let totalTasks = tasks.length;
-            let totalPossibleSubmissions = TOTAL_STUDENTS * totalTasks;
+            let totalPossibleSubmissions = StudentManager.getCount() * totalTasks;
 
-            // 初始化学生统计
-            for (let i = 1; i <= TOTAL_STUDENTS; i++) {
+            for (let i = 1; i <= StudentManager.getCount(); i++) {
                 studentStats[i] = {
                     id: i,
-                    name: PLACEHOLDER_NAMES[i - 1] || `同学${i}`,
+                    name: StudentManager.getName(i),
                     submitted: 0,
                     totalTasks: totalTasks,
                     scores: []
@@ -1906,10 +2080,10 @@
                     appName: "HomeworkTracker",
                     version: "2.0",
                     exportedAt: new Date().toISOString(),
-                    totalStudents: TOTAL_STUDENTS
+                    totalStudents: StudentManager.getCount()
                 },
                 readableSummary: {
-                    students: PLACEHOLDER_NAMES.map((name, idx) => ({ id: idx + 1, name: name })),
+                    students: StudentManager.getAll().map((name, idx) => ({ id: idx + 1, name: name })),
                     tasks: appState.tasks.map(task => {
                         const submittedRecords = [];
                         Object.entries(task.records).forEach(([idStr, rec]) => {
@@ -1917,7 +2091,7 @@
                                 const sid = parseInt(idStr);
                                 submittedRecords.push({
                                     studentId: sid,
-                                    studentName: PLACEHOLDER_NAMES[sid - 1],
+                                    studentName: StudentManager.getName(sid),
                                     submitted: rec.submitted,
                                     score: rec.score
                                 });
@@ -1926,7 +2100,7 @@
                         return {
                             id: task.id,
                             title: task.title,
-                            stats: `${submittedRecords.length}/${TOTAL_STUDENTS}`,
+                            stats: `${submittedRecords.length}/${StudentManager.getCount()}`,
                             records: submittedRecords
                         };
                     })
@@ -2211,7 +2385,7 @@
 
                 const subText = document.createElement('div');
                 subText.className = "text-xs text-gray-400 mt-0.5";
-                subText.textContent = `已提交: ${count}/${TOTAL_STUDENTS}`;
+                subText.textContent = `已提交: ${count}/${StudentManager.getCount()}`;
 
                 infoDiv.appendChild(titleRow);
                 infoDiv.appendChild(subText);
@@ -2274,7 +2448,7 @@
         function closeModal(id) {
             const bg = document.getElementById(`${id}-backdrop`);
             const m = document.getElementById(id);
-            if (id.includes('task') || id.includes('data') || id.includes('stats')) m.classList.add('translate-y-full');
+            if (id.includes('task') || id.includes('data') || id.includes('stats') || id.includes('student')) m.classList.add('translate-y-full');
             else { m.classList.remove('scale-100', 'opacity-100'); m.classList.add('scale-95', 'opacity-0'); }
             if (id === 'input-modal') document.getElementById('common-input').blur();
             if (id === 'score-modal') {
@@ -2361,8 +2535,8 @@
 
         function updateStats() {
             const count = currentStudents.filter(s => s.submitted).length;
-            const pct = Math.round((count / TOTAL_STUDENTS) * 100);
-            document.getElementById('count-display').innerText = `${count}/${TOTAL_STUDENTS}`;
+            const pct = Math.round((count / StudentManager.getCount()) * 100);
+            document.getElementById('count-display').innerText = `${count}/${StudentManager.getCount()}`;
             document.getElementById('progress-bar').style.width = `${pct}%`;
         }
 
@@ -2384,6 +2558,272 @@
             }
             if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(() => showToast('已复制')).catch(() => fallbackCopy(text));
             else fallbackCopy(text);
+        }
+
+        let allStudentsData = [];
+        let filteredStudentsData = [];
+        let selectedStudentIds = new Set();
+
+        function openStudentManagerModal() {
+            closeModal('data-modal');
+            document.getElementById('student-search-input').value = '';
+            selectedStudentIds.clear();
+            allStudentsData = StudentManager.getAll().map((name, idx) => ({
+                id: idx + 1,
+                name: name,
+                originalIndex: idx
+            }));
+            filteredStudentsData = [...allStudentsData];
+            updateSelectedCount();
+            renderStudentList();
+            const bg = document.getElementById('student-modal-backdrop');
+            const m = document.getElementById('student-modal');
+            bg.classList.remove('hidden');
+            setTimeout(() => {
+                m.classList.remove('translate-y-full');
+                document.getElementById('student-search-input').focus();
+            }, 50);
+        }
+
+        function renderStudentList() {
+            const container = document.getElementById('student-list-container');
+            document.getElementById('student-count-badge').textContent = allStudentsData.length;
+            container.innerHTML = '';
+
+            if (filteredStudentsData.length === 0) {
+                container.innerHTML = `
+                    <div class="flex flex-col items-center justify-center py-12 text-gray-400">
+                        <i class="fa-solid fa-users text-4xl mb-3 text-gray-300"></i>
+                        <p class="text-sm">暂无学生</p>
+                    </div>
+                `;
+                return;
+            }
+
+            filteredStudentsData.forEach((student, renderIdx) => {
+                const isSelected = selectedStudentIds.has(student.id);
+                const div = document.createElement('div');
+                div.className = `flex items-center gap-2 p-2.5 rounded-lg transition-all duration-200 ${isSelected ? 'bg-indigo-50 border border-indigo-200' : 'hover:bg-gray-100'}`;
+                div.innerHTML = `
+                    <input type="checkbox" ${isSelected ? 'checked' : ''} onchange="toggleStudentSelection(${student.id})" class="w-4 h-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500 flex-shrink-0 cursor-pointer">
+                    <span class="w-8 text-sm ${isSelected ? 'text-indigo-500' : 'text-gray-400'} font-medium">${student.id}.</span>
+                    <span class="flex-1 text-sm font-medium ${isSelected ? 'text-indigo-700' : 'text-gray-700'} truncate">${escapeHtml(student.name)}</span>
+                    <div class="flex items-center gap-1">
+                        <button onclick="editStudentPrompt(${student.id})" class="p-1.5 text-gray-400 hover:text-blue-500 hover:bg-blue-50 rounded-lg transition" title="编辑">
+                            <i class="fa-solid fa-pen text-xs"></i>
+                        </button>
+                        <button onclick="deleteStudent(${student.id})" class="p-1.5 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition" title="删除">
+                            <i class="fa-solid fa-trash-can text-xs"></i>
+                        </button>
+                    </div>
+                `;
+                div.addEventListener('click', (e) => {
+                    if (e.target.tagName !== 'INPUT' && e.target.tagName !== 'BUTTON' && !e.target.closest('button')) {
+                        const checkbox = div.querySelector('input[type="checkbox"]');
+                        checkbox.checked = !checkbox.checked;
+                        toggleStudentSelection(student.id);
+                    }
+                });
+                div.classList.add('group', 'cursor-pointer');
+                container.appendChild(div);
+            });
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        function searchStudents(keyword) {
+            const kw = keyword.trim().toLowerCase();
+            if (!kw) {
+                filteredStudentsData = [...allStudentsData];
+            } else {
+                filteredStudentsData = allStudentsData.filter(s => s.name.toLowerCase().includes(kw));
+            }
+            renderStudentList();
+        }
+
+        function toggleStudentSelection(id) {
+            if (selectedStudentIds.has(id)) {
+                selectedStudentIds.delete(id);
+            } else {
+                selectedStudentIds.add(id);
+            }
+            updateSelectedCount();
+            renderStudentList();
+            document.getElementById('select-all-students').checked = selectedStudentIds.size === filteredStudentsData.length && filteredStudentsData.length > 0;
+        }
+
+        function toggleSelectAllStudents(checked) {
+            if (checked) {
+                filteredStudentsData.forEach(s => selectedStudentIds.add(s.id));
+            } else {
+                selectedStudentIds.clear();
+            }
+            updateSelectedCount();
+            renderStudentList();
+        }
+
+        function updateSelectedCount() {
+            const count = selectedStudentIds.size;
+            document.getElementById('selected-count').textContent = `已选 ${count} 人`;
+            document.getElementById('batch-delete-btn').disabled = count === 0;
+        }
+
+        function openAddStudentModal() {
+            document.getElementById('common-input').value = '';
+            document.getElementById('input-modal-title').textContent = '添加学生';
+            document.getElementById('input-modal').querySelector('input').placeholder = '输入学生姓名';
+            const bg = document.getElementById('input-modal-backdrop');
+            const m = document.getElementById('input-modal');
+            bg.classList.remove('hidden');
+            setTimeout(() => {
+                m.classList.remove('scale-95', 'opacity-0');
+                m.classList.add('scale-100', 'opacity-100');
+                document.getElementById('common-input').focus();
+            }, 50);
+            onInputConfirm = () => {
+                const name = document.getElementById('common-input').value.trim();
+                if (name && StudentManager.add(name)) {
+                    closeModal('input-modal');
+                    allStudentsData = StudentManager.getAll().map((n, idx) => ({ id: idx + 1, name: n, originalIndex: idx }));
+                    filteredStudentsData = [...allStudentsData];
+                    document.getElementById('student-search-input').value = '';
+                    renderStudentList();
+                    showToast('添加成功');
+                    rebuildCurrentStudents();
+                    renderGrid();
+                    updateStats();
+                } else {
+                    showToast('请输入有效的姓名');
+                }
+            };
+        }
+
+        function addStudentFromInput() {
+            openAddStudentModal();
+        }
+
+        function deleteStudent(id) {
+            const name = StudentManager.getName(id);
+            openConfirmModal('删除学生', `确定要删除「${name}」吗？此操作不可撤销。`, () => {
+                if (StudentManager.delete(id)) {
+                    allStudentsData = StudentManager.getAll().map((n, idx) => ({ id: idx + 1, name: n, originalIndex: idx }));
+                    filteredStudentsData = [...allStudentsData];
+                    selectedStudentIds.delete(id);
+                    updateSelectedCount();
+                    renderStudentList();
+                    showToast('已删除');
+                    rebuildCurrentStudents();
+                    renderGrid();
+                    updateStats();
+                }
+            });
+        }
+
+        function batchDeleteStudents() {
+            const count = selectedStudentIds.size;
+            if (count === 0) return;
+            openConfirmModal('批量删除', `确定要删除选中的 ${count} 名学生吗？此操作不可撤销。`, () => {
+                const idsToDelete = Array.from(selectedStudentIds).sort((a, b) => b - a);
+                idsToDelete.forEach(id => StudentManager.delete(id));
+                allStudentsData = StudentManager.getAll().map((n, idx) => ({ id: idx + 1, name: n, originalIndex: idx }));
+                filteredStudentsData = [...allStudentsData];
+                selectedStudentIds.clear();
+                updateSelectedCount();
+                renderStudentList();
+                showToast(`已删除 ${count} 名学生`);
+                rebuildCurrentStudents();
+                renderGrid();
+                updateStats();
+            });
+        }
+
+        function editStudentPrompt(id) {
+            const currentName = StudentManager.getName(id);
+            document.getElementById('common-input').value = currentName;
+            document.getElementById('input-modal-title').textContent = '修改姓名';
+            document.getElementById('input-modal').querySelector('input').placeholder = '输入新姓名';
+            const bg = document.getElementById('input-modal-backdrop');
+            const m = document.getElementById('input-modal');
+            bg.classList.remove('hidden');
+            setTimeout(() => {
+                m.classList.remove('scale-95', 'opacity-0');
+                m.classList.add('scale-100', 'opacity-100');
+                document.getElementById('common-input').focus();
+            }, 50);
+            onInputConfirm = () => {
+                const newName = document.getElementById('common-input').value.trim();
+                if (newName && StudentManager.edit(id, newName)) {
+                    closeModal('input-modal');
+                    allStudentsData = StudentManager.getAll().map((n, idx) => ({ id: idx + 1, name: n, originalIndex: idx }));
+                    filteredStudentsData = [...allStudentsData];
+                    renderStudentList();
+                    showToast('修改成功');
+                    rebuildCurrentStudents();
+                    renderGrid();
+                } else {
+                    showToast('请输入有效的姓名');
+                }
+            };
+        }
+
+        function resetToDefaultStudents() {
+            openConfirmModal('恢复默认', '确定要恢复默认学生名单吗？当前自定义名单将被覆盖。', () => {
+                if (StudentManager.resetToDefault()) {
+                    allStudentsData = StudentManager.getAll().map((n, idx) => ({ id: idx + 1, name: n, originalIndex: idx }));
+                    filteredStudentsData = [...allStudentsData];
+                    selectedStudentIds.clear();
+                    updateSelectedCount();
+                    document.getElementById('student-search-input').value = '';
+                    renderStudentList();
+                    showToast('已恢复默认名单');
+                    rebuildCurrentStudents();
+                    renderGrid();
+                    updateStats();
+                }
+            });
+        }
+
+        function exportStudentList() {
+            const data = StudentManager.export();
+            const blob = new Blob([data], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `学生名单_${new Date().toLocaleDateString()}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+            showToast('已导出学生名单');
+        }
+
+        function triggerImportStudents() {
+            document.getElementById('import-student-input').click();
+        }
+
+        function importStudents(file) {
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                if (StudentManager.import(e.target.result)) {
+                    allStudentsData = StudentManager.getAll().map((n, idx) => ({ id: idx + 1, name: n, originalIndex: idx }));
+                    filteredStudentsData = [...allStudentsData];
+                    selectedStudentIds.clear();
+                    updateSelectedCount();
+                    document.getElementById('student-search-input').value = '';
+                    renderStudentList();
+                    showToast('导入成功');
+                    rebuildCurrentStudents();
+                    renderGrid();
+                    updateStats();
+                } else {
+                    showToast('导入失败，请检查文件格式');
+                }
+            };
+            reader.readAsText(file);
+            document.getElementById('import-student-input').value = '';
         }
 
         function fallbackCopy(text) {
