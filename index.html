@@ -877,16 +877,12 @@
     <script src="src/app.js"></script>
     <script>
         // ================= 配置区域 =================
-        // 版本号规则：日期时间格式 (YYYYMMDD-HHMMSS)
-        // - YYYY: 4位年份
-        // - MM: 2位月份
-        // - DD: 2位日期
-        // - HH: 2位小时 (24小时制)
-        // - MM: 2位分钟
-        // - SS: 2位秒
-        // 格式示例：20260113-153000 表示 2026年1月13日 15:30:00
+        // 版本号规则：主版本.次版本.修订号
+        // - 主版本：重大功能更新或架构变更
+        // - 次版本：新功能或重要改进
+        // - 修订号：bug修复或小改进
         // 每次代码修改后更新版本号
-        const APP_VERSION = '20260113-153045';
+        const APP_VERSION = '1.4.0';
 
         const STORAGE_KEY_V2 = 'homework_data_v2';
         const STORAGE_KEY_V1 = 'homework_data_v1';
