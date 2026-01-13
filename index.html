@@ -867,6 +867,14 @@
     <input type="file" id="import-file-input" accept=".json" class="hidden" onchange="handleFileImport(event)">
     <input type="file" id="import-student-input" accept=".json" class="hidden" onchange="importStudents(this.files[0])">
 
+    <script src="module-loader.js"></script>
+    <script src="src/modules/storage.js"></script>
+    <script src="src/modules/student-manager.js"></script>
+    <script src="src/modules/task-manager.js"></script>
+    <script src="src/modules/state-manager.js"></script>
+    <script src="src/modules/ui-components.js"></script>
+    <script src="src/core/event-bus.js"></script>
+    <script src="src/app.js"></script>
     <script>
         // ================= 配置区域 =================
         // 版本号规则：主版本.次版本.修订号
@@ -874,7 +882,7 @@
         // - 次版本：新功能或重要改进
         // - 修订号：bug修复或小改进
         // 每次代码修改后更新版本号
-        const APP_VERSION = '1.3.5';
+        const APP_VERSION = '1.4.0';
 
         const STORAGE_KEY_V2 = 'homework_data_v2';
         const STORAGE_KEY_V1 = 'homework_data_v1';
@@ -892,107 +900,84 @@
         ];
 
         const StudentManager = {
-            _students: null,
+            init: () => StudentManagerModule.init(),
+            save: () => StudentManagerModule.save(),
+            getAll: () => StudentManagerModule.getAll(),
+            getCount: () => StudentManagerModule.getCount(),
+            getName: (id) => StudentManagerModule.getName(id),
+            add: (name) => StudentManagerModule.add(name),
+            edit: (id, newName) => StudentManagerModule.edit(id, newName),
+            delete: (id) => StudentManagerModule.delete(id),
+            insert: (id, name) => StudentManagerModule.insert(id, name),
+            resetToDefault: () => StudentManagerModule.resetToDefault(),
+            export: () => StudentManagerModule.export(),
+            import: (jsonStr) => StudentManagerModule.import(jsonStr)
+        };
 
-            init() {
-                try {
-                    const stored = localStorage.getItem(STUDENTS_KEY);
-                    if (stored) {
-                        const parsed = JSON.parse(stored);
-                        if (Array.isArray(parsed) && parsed.length > 0) {
-                            this._students = parsed;
-                            return true;
-                        }
-                    }
-                } catch (e) {
-                    console.error('加载学生列表失败:', e);
-                }
-                this._students = [...DEFAULT_STUDENTS];
-                this.save();
-                return true;
-            },
+        const TaskManager = {
+            init: () => TaskManagerModule.init(),
+            save: () => TaskManagerModule.save(),
+            getAll: () => TaskManagerModule.getAll(),
+            getCount: () => TaskManagerModule.getCount(),
+            getCurrentId: () => TaskManagerModule.getCurrentId(),
+            getCurrent: () => TaskManagerModule.getCurrent(),
+            getTask: (id) => TaskManagerModule.getTask(id),
+            create: (title) => TaskManagerModule.create(title),
+            delete: (id) => TaskManagerModule.delete(id),
+            rename: (id, newTitle) => TaskManagerModule.rename(id, newTitle),
+            switch: (id) => TaskManagerModule.switch(id),
+            submit: (taskId, studentId, submitted) => TaskManagerModule.submit(taskId, studentId, submitted),
+            score: (taskId, studentId, score) => TaskManagerModule.score(taskId, studentId, score),
+            getRecord: (taskId, studentId) => TaskManagerModule.getRecord(taskId, studentId),
+            getSubmittedCount: (taskId) => TaskManagerModule.getSubmittedCount(taskId),
+            getAllData: () => TaskManagerModule.getAllData(),
+            export: () => TaskManagerModule.export(),
+            import: (jsonStr) => TaskManagerModule.import(jsonStr)
+        };
 
-            save() {
-                try {
-                    localStorage.setItem(STUDENTS_KEY, JSON.stringify(this._students));
-                    return true;
-                } catch (e) {
-                    console.error('保存学生列表失败:', e);
-                    return false;
-                }
-            },
+        const StateManager = {
+            init: () => StateManagerModule.init(),
+            getState: () => StateManagerModule.getState(),
+            get: (key) => StateManagerModule.get(key),
+            setState: (updates) => StateManagerModule.setState(updates),
+            set: (key, value) => StateManagerModule.set(key, value),
+            addListener: (key, callback) => StateManagerModule.addListener(key, callback),
+            removeListener: (id) => StateManagerModule.removeListener(id),
+            reset: () => StateManagerModule.reset(),
+            export: () => StateManagerModule.export(),
+            import: (jsonStr) => StateManagerModule.import(jsonStr)
+        };
 
-            getAll() {
-                if (!this._students) this.init();
-                return this._students;
-            },
+        const UIComponents = {
+            initGrid: (gridId) => UIComponentsModule.StudentGridService.init(gridId),
+            renderGrid: (students, isNameVisible, touchCallback) => UIComponentsModule.StudentGridService.render(students, isNameVisible, touchCallback),
+            updateGridOne: (index, student, isNameVisible) => UIComponentsModule.StudentGridService.updateOne(index, student, isNameVisible),
+            bindTouchEvents: (el, id, callback) => UIComponentsModule.StudentGridService.bindTouchEvents(el, id, callback),
+            initToast: (toastId) => UIComponentsModule.ToastService.init(toastId),
+            showToast: (message, duration) => UIComponentsModule.ToastService.show(message, duration),
+            hideToast: () => UIComponentsModule.ToastService.hide(),
+            openSlideModal: (backdropId, modalId) => UIComponentsModule.ModalService.openSlide(backdropId, modalId),
+            openScaleModal: (backdropId, modalId, callback) => UIComponentsModule.ModalService.openScale(backdropId, modalId, callback),
+            closeModal: (modalId) => UIComponentsModule.ModalService.close(modalId),
+            closeAllModals: () => UIComponentsModule.ModalService.closeAll(),
+            getTopModal: () => UIComponentsModule.ModalService.getTopModal()
+        };
 
-            getCount() {
-                return this.getAll().length;
-            },
+        const EventBus = {
+            on: (event, callback, priority) => EventBusModule.on(event, callback, priority),
+            once: (event, callback, priority) => EventBusModule.once(event, callback, priority),
+            off: (event, callbackOrId) => EventBusModule.off(event, callbackOrId),
+            emit: (event, data) => EventBusModule.emit(event, data),
+            getListeners: (event) => EventBusModule.getListeners(event),
+            hasListeners: (event) => EventBusModule.hasListeners(event),
+            getListenerCount: (event) => EventBusModule.getListenerCount(event)
+        };
 
-            getName(id) {
-                const students = this.getAll();
-                const idx = id - 1;
-                return (idx >= 0 && idx < students.length) ? students[idx] : `同学${id}`;
-            },
-
-            add(name) {
-                if (!name || typeof name !== 'string' || name.trim() === '') return false;
-                this._students.push(name.trim());
-                return this.save();
-            },
-
-            edit(id, newName) {
-                if (!newName || typeof newName !== 'string' || newName.trim() === '') return false;
-                const idx = id - 1;
-                if (idx >= 0 && idx < this._students.length) {
-                    this._students[idx] = newName.trim();
-                    return this.save();
-                }
-                return false;
-            },
-
-            delete(id) {
-                const idx = id - 1;
-                if (idx >= 0 && idx < this._students.length) {
-                    this._students.splice(idx, 1);
-                    return this.save();
-                }
-                return false;
-            },
-
-            insert(id, name) {
-                if (!name || typeof name !== 'string' || name.trim() === '') return false;
-                const idx = id - 1;
-                if (idx >= 0 && idx <= this._students.length) {
-                    this._students.splice(idx, 0, name.trim());
-                    return this.save();
-                }
-                return false;
-            },
-
-            resetToDefault() {
-                this._students = [...DEFAULT_STUDENTS];
-                return this.save();
-            },
-
-            export() {
-                return JSON.stringify(this._students, null, 2);
-            },
-
-            import(jsonStr) {
-                try {
-                    const parsed = JSON.parse(jsonStr);
-                    if (Array.isArray(parsed) && parsed.length > 0 && parsed.every(s => typeof s === 'string')) {
-                        this._students = parsed;
-                        return this.save();
-                    }
-                } catch (e) {
-                    console.error('导入学生列表失败:', e);
-                }
-                return false;
-            }
+        const App = {
+            init: () => AppModule.init(),
+            render: () => AppModule.render(),
+            cleanup: () => AppModule.cleanup(),
+            isInitialized: () => AppModule.isInitialized()
         };
 
         // ================= 状态管理 =================
@@ -1064,50 +1049,12 @@
             }
         };
 
-        // 本地存储工具（带错误处理）
+        // 本地存储工具（带错误处理）- 兼容旧代码，新代码请使用 StorageService
         const StorageHelper = {
-            get: (key, defaultValue = null) => {
-                try {
-                    const item = localStorage.getItem(key);
-                    return item ? JSON.parse(item) : defaultValue;
-                } catch (e) {
-                    console.error('Storage get error:', e);
-                    return defaultValue;
-                }
-            },
-            set: (key, value) => {
-                try {
-                    const str = JSON.stringify(value);
-                    localStorage.setItem(key, str);
-                    return true;
-                } catch (e) {
-                    if (e.name === 'QuotaExceededError') {
-                        console.error('Storage quota exceeded');
-                        showToast('存储空间不足');
-                    } else {
-                        console.error('Storage set error:', e);
-                    }
-                    return false;
-                }
-            },
-            remove: (key) => {
-                try {
-                    localStorage.removeItem(key);
-                    return true;
-                } catch (e) {
-                    console.error('Storage remove error:', e);
-                    return false;
-                }
-            },
-            clear: () => {
-                try {
-                    localStorage.clear();
-                    return true;
-                } catch (e) {
-                    console.error('Storage clear error:', e);
-                    return false;
-                }
-            }
+            get: (key, defaultValue = null) => StorageService.get(key, defaultValue),
+            set: (key, value) => StorageService.set(key, value),
+            remove: (key) => StorageService.remove(key),
+            clear: () => StorageService.clear()
         };
 
         // DOM 缓存（init时填充）
@@ -1138,6 +1085,7 @@
         // ================= 初始化 =================
         function init() {
             StudentManager.init();
+            ModuleLoader.init('storage');
 
             const savedVisibility = localStorage.getItem(NAME_VISIBILITY_KEY);
             if (savedVisibility !== null) isNameVisible = JSON.parse(savedVisibility);
